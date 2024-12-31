@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.chats.whattsapp.exception.UserException;
@@ -20,10 +25,20 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
     @Autowired
     private TokenProvider tokenProvider;
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    
 
-    public UserServiceImpl(UserRepository userRepository, TokenProvider tokenProvider) {
+    public UserServiceImpl(UserRepository userRepository, 
+            TokenProvider tokenProvider,
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.tokenProvider = tokenProvider;
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -61,6 +76,28 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<User> searchUser(String query) {
         return userRepository.searchUser(query);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Authentication authenticate(String username, String password) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        if (userDetails==null) {
+            throw new BadCredentialsException("Invalid username");
+        }
+        if (!passwordEncoder.matches(password, userDetails.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
+        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
 }
