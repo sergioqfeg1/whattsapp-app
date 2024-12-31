@@ -1,4 +1,4 @@
-package com.chats.config;
+package com.chats.whattsapp.config;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,7 +22,8 @@ public class AppConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and().authorizeHttpRequests(auth -> auth.requestMatchers("/api/**").authenticated()
+        .and().authorizeHttpRequests(auth -> 
+            auth.requestMatchers("/api/**").authenticated()
             .anyRequest().permitAll()
         ).addFilterBefore(new JwtTokenValidator(),BasicAuthenticationFilter.class)
         .csrf().disable()
@@ -44,9 +45,8 @@ public class AppConfig {
                 return cfg;
             }
 
-        })
-        .and().formLogin().and().httpBasic();
-
+        }).and().formLogin().and().httpBasic();
+        
         return http.build();
     }
 

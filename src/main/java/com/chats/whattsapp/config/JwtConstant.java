@@ -1,4 +1,4 @@
-package com.chats.config;
+package com.chats.whattsapp.config;
 
 public class JwtConstant {
 

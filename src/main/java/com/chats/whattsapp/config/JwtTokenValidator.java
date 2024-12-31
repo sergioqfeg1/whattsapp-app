@@ -1,4 +1,4 @@
-package com.chats.config;
+package com.chats.whattsapp.config;
 
 import java.io.IOException;
 import java.util.List;
