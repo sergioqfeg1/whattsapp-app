@@ -33,6 +33,9 @@ public class Chat {
     private User createdBy;
 
     @ManyToMany
+    Set<User> admins = new HashSet<User>();
+    
+    @ManyToMany
     Set<User> users = new HashSet<User>();
 
     @OneToMany
@@ -74,6 +77,10 @@ public class Chat {
 
     public List<Message> getMessages() {
         return messages;
+    }
+
+    public Set<User> getAdmins() {
+        return admins;
     }
 
     public void setId(Long id) {

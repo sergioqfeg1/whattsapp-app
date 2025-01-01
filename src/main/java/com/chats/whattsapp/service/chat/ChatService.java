@@ -13,10 +13,10 @@ public interface ChatService {
     Chat createChat(User reqUser, Long userId2) throws UserException;
     Chat findChatById(Long chatId) throws ChatException;
     List<Chat> findChatsByUser(Long userId) throws UserException;
-    Chat createGroup(GroupChatRequest req, Long reqUserId) throws UserException;
-    Chat addUserToGroup(Long userId, Long chatId) throws UserException, ChatException;
-    Chat renameGroup(Long chatId, String groupName, Long reqUserId) throws UserException, ChatException;
-    Chat removeFromGroup(Long chatId, Long userId, Long reqUserId) throws UserException, ChatException;
-    Chat deleteChat(Long chatId, Long userId) throws UserException, ChatException;
+    Chat createGroup(GroupChatRequest req, User reqUser) throws UserException;
+    Chat addUserToGroup(Long userId, Long chatId, User reqUser) throws UserException, ChatException;
+    Chat renameGroup(Long chatId, String groupName, User reqUserId) throws UserException, ChatException;
+    Chat removeFromGroup(Long chatId, Long userId, User reqUserId) throws UserException, ChatException;
+    void deleteChat(Long chatId) throws UserException, ChatException;
 
 }
